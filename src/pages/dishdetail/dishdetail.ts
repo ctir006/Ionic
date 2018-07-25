@@ -1,8 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ActionSheetController, ModalController } from 'ionic-angular';
 import { Dish } from '../../shared/dish';
 import { Comment } from '../../shared/comment';
 import { FavoriteProvider } from '../../providers/favorite/favorite';
+import { CommentPage } from '../comment/comment';
 
 /**
  * Generated class for the DishdetailPage page.
@@ -25,6 +26,8 @@ export class DishdetailPage {
     constructor(public navCtrl: NavController, public navParams: NavParams,
         private toastCtrl: ToastController,
         @Inject('BaseURL') private BaseURL,
+        private modalCtrl: ModalController,
+        private actionCtrl: ActionSheetController,
         private favoriteservice: FavoriteProvider) {
         this.dish = navParams.get('dish');
         this.favorite = this.favoriteservice.isFavorite(this.dish.id);
@@ -47,5 +50,42 @@ export class DishdetailPage {
             duration: 3000
         }).present();
     }
-
+    presentActionSheet() {
+        const actionSheet = this.actionCtrl.create({
+            title: 'select actions',
+            buttons: [
+                {
+                    text: 'Add to favorites',
+                    role: 'primary',
+                    handler: () => {
+                        console.log('Adding to Favorites', this.dish.id);
+                        this.favorite = this.favoriteservice.addFavorite(this.dish.id);
+                        this.toastCtrl.create({
+                            message: 'Dish ' + this.dish.id + ' added as favorite successfully',
+                            position: 'middle',
+                            duration: 3000
+                        }).present();
+                    }
+                }, {
+                    text: 'Add comment',
+                    role: 'primary',
+                    handler: () => {
+                        let modal = this.modalCtrl.create(CommentPage);
+                        modal.onDidDismiss(data => {
+                            console.log(data);
+                            this.dish.comments.push(data);
+                        });
+                         modal.present();
+                    }
+                }, {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                }
+            ]
+        });
+        actionSheet.present();
+    }
 }
