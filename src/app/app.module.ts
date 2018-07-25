@@ -6,6 +6,7 @@ import { baseURL } from '../shared/baseurl';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { AboutPage } from '../pages/about/about';
+import { LoginPage } from '../pages/login/login';
 import { DishdetailPage } from '../pages/dishdetail/dishdetail';
 import { MenuPage } from '../pages/menu/menu';
 import { FavoritesPage } from '../pages/favorites/favorites';
@@ -19,6 +20,7 @@ import { LeaderProvider } from '../providers/leader/leader';
 import { PromotionProvider } from '../providers/promotion/promotion';
 import { ProcessHttpmsgProvider } from '../providers/process-httpmsg/process-httpmsg';
 import { FavoriteProvider } from '../providers/favorite/favorite';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -30,9 +32,11 @@ import { FavoriteProvider } from '../providers/favorite/favorite';
       CommentPage,
     DishdetailPage,
     FavoritesPage,
-    ReservationPage
+    ReservationPage,
+    LoginPage
   ],
   imports: [
+      IonicStorageModule.forRoot(),
       BrowserModule,
       HttpModule,
     IonicModule.forRoot(MyApp),
@@ -47,7 +51,8 @@ import { FavoriteProvider } from '../providers/favorite/favorite';
       DishdetailPage,
       FavoritesPage,
       CommentPage,
-      ReservationPage
+      ReservationPage,
+      LoginPage
   ],
   providers: [
     StatusBar,
